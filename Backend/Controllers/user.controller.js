@@ -6,9 +6,8 @@ const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-// Environment variables
 const JWT_SECRET = process.env.JWT_SECRET;
-const RESET_PASSWORD_TOKEN_EXPIRY = "1h"; // Token expiry time
+const RESET_PASSWORD_TOKEN_EXPIRY = "1h"; 
 
 // Register User
 exports.registerUser = async (req, res) => {
