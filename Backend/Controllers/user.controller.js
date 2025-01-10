@@ -83,44 +83,35 @@ exports.forgotPassword = async (req, res) => {
         }
 
         // Generate reset token
-        const resetToken = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: RESET_PASSWORD_TOKEN_EXPIRY });
+        const resetToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' }); // Token valid for 15 minutes
 
-        // Email setup
-        const transporter = nodemailer.createTransport({
-            service: "gmail", // Replace with your email service
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASSWORD,
-            },
+        // Respond with the reset token for testing purposes
+        res.status(200).json({
+            message: 'Password reset token generated successfully.',
+            resetToken,
         });
-
-        const resetLink = `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: "Password Reset Request",
-            html: `<p>Click the link below to reset your password:</p><a href="${resetLink}">${resetLink}</a>`,
-        });
-
-        res.status(200).json({ message: "Password reset link sent to your email." });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Error sending password reset email. Please try again later." });
+        res.status(500).json({ message: 'Error generating reset token. Please try again later.' });
     }
 };
+
 
 // Reset Password
 exports.resetPassword = async (req, res) => {
     const { token, newPassword } = req.body;
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+        // Verify the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+        // Find the user by ID from the decoded token
         const user = await User.findById(decoded.userId);
         if (!user) {
             return res.status(404).json({ message: 'Invalid token or user not found.' });
         }
 
+        // Hash the new password and save it
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
         await user.save();

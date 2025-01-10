@@ -1,8 +1,8 @@
-const Admin = require('../Models/user.model');
+const User = require('../Models/user.model');
 module.exports.createUser = async ({
     name,email,password
 }) => {
-    if (!name || !stud_id || !email || !password) {
+    if (!name ||!email || !password) {
         throw new Error('All fields are required');
     }
     console.log("Creating user with:", { name,email,password});
