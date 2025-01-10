@@ -29,7 +29,7 @@ Before running the application, ensure you have the following installed:
 Create a `.env` file in the root directory and configure the following environment variables:
 
 ```env
-PORT=5000
+PORT=YOUR_PORT
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret_key
 ```
