@@ -1,8 +1,7 @@
 const User = require('../Models/user.model');
 const { validationResult } = require('express-validator');
 const userService = require('../Services/user.service');
-const blackListTokenModel = require('../Models/blacklistToken.model');
-const nodemailer = require("nodemailer");
+const blackListTokenModel = require('../Models/blackListToken.model');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
